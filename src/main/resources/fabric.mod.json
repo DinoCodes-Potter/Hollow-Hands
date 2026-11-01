@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "hollowhands",
+  "version": "${version}",
+  "name": "Hollow Hands",
+  "description": "A physical carrying and storage system for Minecraft.",
+  "authors": ["DinoCodes-Potter"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.hollowhands.HollowHandsClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
