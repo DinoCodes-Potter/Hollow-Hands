@@ -16,8 +16,6 @@ dependencies {
 }
 
 loom {
-    mixin { useLegacyMixinAp = true
-        defaultRefmapName = "hollowhands.refmap.json" }
     splitEnvironmentSourceSets()
     mods {
         "hollowhands" {
