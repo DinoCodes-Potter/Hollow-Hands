@@ -29,6 +29,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hollowhands-mc26.3-fabric
-          path: build/libs/hollowhands-0.6.0.jar
+          path: build/libs/hollowhands-0.7.0.jar
           if-no-files-found: error
           retention-days: 14
