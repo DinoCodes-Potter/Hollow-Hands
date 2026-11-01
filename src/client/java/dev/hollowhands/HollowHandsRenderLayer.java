@@ -72,7 +72,7 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         poseStack.pushPose();
         poseStack.mulPose(new Matrix4f().rotateY((float) Math.PI));
         poseStack.mulPose(new Matrix4f().rotateZ((float) Math.PI));
-        poseStack.translate(0.0F, -0.25F, -0.30F);
+        poseStack.translate(0.0F, -0.25F, -0.02F);
         poseStack.scale(0.50F, 0.75F, 0.50F);
         item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
@@ -84,13 +84,13 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         poseStack.pushPose();
         poseStack.mulPose(new Matrix4f().rotateY((float) Math.PI));
         poseStack.mulPose(new Matrix4f().rotateZ((float) Math.PI));
-        poseStack.translate(0.0F, -0.25F, -0.30F);
+        poseStack.translate(0.0F, -0.25F, -0.02F);
         // Same transform as the backpack: contents cannot drift independently.
         for (int i = 0; i < 6; i++) {
             float x = -0.105F + (i % 3) * 0.105F;
             float y = -0.11F + (i / 3) * 0.15F;
             drawHanging(contents.get(2 + i), poseStack, collector, light, state,
-                    x, y, -0.265F, 0.12F, 0.0F);
+                    x, y, -0.13F, 0.12F, 0.0F);
         }
         poseStack.popPose();
     }
