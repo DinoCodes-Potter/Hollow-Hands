@@ -6,8 +6,9 @@
   "description": "A physical carrying and storage system for Minecraft.",
   "authors": ["DinoCodes-Potter"],
   "license": "MIT",
-  "environment": "client",
+  "environment": "*",
   "entrypoints": {
+    "main": ["dev.hollowhands.HollowHands"],
     "client": ["dev.hollowhands.HollowHandsClient"]
   },
   "depends": {
