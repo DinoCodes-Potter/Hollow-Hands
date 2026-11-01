@@ -18,7 +18,6 @@ public final class HollowHandsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        HollowHandsStorage.load();
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (OPEN_KEY.consumeClick()) {
                 if (client.player != null && client.gui.screen() == null) {
