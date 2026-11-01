@@ -1,7 +1,6 @@
 package dev.hollowhands;
 import java.util.List;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -28,7 +27,6 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
  private static void draw(ItemStackRenderState item,PoseStack poseStack,SubmitNodeCollector collector,int light,AvatarRenderState state,float x,float y,float z,float scale,float yaw){
   if(item==null||item.isEmpty())return;
   poseStack.pushPose();poseStack.translate(x,-state.boundingBoxHeight+y,z);
-  if(yaw!=0)poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
   poseStack.scale(scale,scale,scale);
   item.submit(poseStack,collector,light,OverlayTexture.NO_OVERLAY,state.outlineColor);
   poseStack.popPose();
