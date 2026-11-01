@@ -19,7 +19,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
-      - name: Set up Gradle 9.6
+      - name: Set up Gradle 9.8
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.8.0'
@@ -29,6 +29,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: hollowhands-mc26.3-fabric
-          path: build/libs/hollowhands-0.5.0.jar
+          path: build/libs/hollowhands-0.6.0.jar
           if-no-files-found: error
           retention-days: 14
