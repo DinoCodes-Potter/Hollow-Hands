@@ -2,7 +2,7 @@ package dev.hollowhands;
 
 import java.util.List;
 
-import org.joml.Quaternionf;
+import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.player.PlayerModel;
@@ -109,7 +109,7 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         if (item == null || item.isEmpty()) return;
         poseStack.pushPose();
         poseStack.translate(x, y, z);
-        poseStack.mulPose(new Quaternionf().rotationY(yRot).rotateX(xRot).rotateZ(zRot));
+        poseStack.mulPose(new Matrix4f().rotateY(yRot).rotateX(xRot).rotateZ(zRot));
         poseStack.scale(scale, scale, scale);
         item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
@@ -124,7 +124,7 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         // Pivot at the attachment loop, so the lower end swings like a tool
         // hanging from a belt instead of rotating around its centre.
         poseStack.translate(x, y, z);
-        poseStack.mulPose(new Quaternionf().rotationZ((float) Math.PI + swing));
+        poseStack.mulPose(new Matrix4f().rotateZ((float) Math.PI + swing));
         poseStack.scale(scale, scale, scale);
         poseStack.translate(0.0F, -0.10F, 0.0F);
         item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
