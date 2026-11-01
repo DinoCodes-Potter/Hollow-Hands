@@ -14,9 +14,9 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 
 /**
- * Physical gear is attached to the torso model, not the entity bounding box.
- * Contents use separate hanging transforms so long tools visibly dangle and
- * sway with the player's walk cycle.
+ * Wearable equipment is rendered in the player's torso coordinate space.
+ * Each piece has its own attachment transform; stored items are mounted to
+ * the surface of the corresponding piece rather than positioned in world space.
  */
 public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
     public HollowHandsRenderLayer(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
@@ -33,63 +33,38 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         poseStack.pushPose();
         getParentModel().body.translateAndRotate(poseStack);
 
-        // The model JSON now uses neutral display scale. These are the only
-        // scale factors, preventing the old accidental double-shrink.
-        // Belt wraps the waist; backpack sits behind the shoulders; satchel
-        // hangs at the right hip; bandolier crosses the chest.
-        draw(gear.get(0), poseStack, collector, light, state,
-                0.0F, 0.655F, -0.035F, 0.82F);
+        // Item models are 16-pixel assets. Half-width scaling matches the
+        // player's 8-pixel torso; vertical scaling follows its 12-pixel height.
+        drawScaled(gear.get(0), poseStack, collector, light, state,
+                0.0F, 0.655F, -0.035F, 0.50F, 0.50F, 0.50F);
         drawBackpack(gear.get(1), poseStack, collector, light, state);
-        drawRotated(gear.get(2), poseStack, collector, light, state,
-                0.245F, 0.585F, -0.015F, 0.88F, 0.0F, 0.48F, 0.0F);
-        draw(gear.get(3), poseStack, collector, light, state,
-                0.0F, 0.34F, -0.145F, 0.90F);
+        drawSatchel(gear.get(2), poseStack, collector, light, state);
+        drawScaled(gear.get(3), poseStack, collector, light, state,
+                0.0F, 0.34F, -0.145F, 0.50F, 0.75F, 0.50F);
 
         if (contents != null && contents.size() == HollowHandsData.TOTAL_SLOTS) {
-            // Belt tools hang from two separate loops, handles up and heads
-            // down. The pendulum rotation is driven by the player's gait.
+            // Belt tools sit just outside the belt's front face.
             for (int i = 0; i < 2; i++) {
                 float side = i == 0 ? -1.0F : 1.0F;
                 drawHanging(contents.get(i), poseStack, collector, light, state,
-                        side * 0.145F, 0.675F, -0.155F, 0.39F,
-                        i == 0 ? -0.12F : 0.12F);
+                        side * 0.145F, 0.675F, -0.145F, 0.16F,
+                        i == 0 ? -0.08F : 0.08F);
             }
 
-            // Backpack contents sit in two rows, slightly proud of the pack.
-            for (int i = 0; i < 6; i++) {
-                float x = -0.18F + (i % 3) * 0.18F;
-                float y = 0.19F + (i / 3) * 0.19F;
-                drawHanging(contents.get(2 + i), poseStack, collector, light, state,
-                        x, y, 0.235F, 0.27F, 0.0F);
-            }
+            drawBackpackContents(contents, poseStack, collector, light, state);
+            drawSatchelContents(contents, poseStack, collector, light, state);
 
-            // Satchel contents are displayed on the outward-facing flap.
-            for (int i = 0; i < 9; i++) {
-                float x = 0.315F;
-                float y = 0.50F - (i / 3) * 0.105F;
-                float z = -0.12F + (i % 3) * 0.055F;
-                draw(contents.get(8 + i), poseStack, collector, light, state,
-                        x, y, z, 0.19F);
-            }
-
-            // Bandolier tools hang from the diagonal strap in a spaced row.
+            // Four bandolier slots follow the diagonal artwork on the strap.
             for (int i = 0; i < 4; i++) {
-                float x = -0.17F + i * 0.105F;
-                float y = 0.13F + i * 0.13F;
+                float x = -0.12F + i * 0.08F;
+                float y = 0.12F + i * 0.12F;
                 drawHanging(contents.get(17 + i), poseStack, collector, light, state,
-                        x, y, -0.17F, 0.29F, 0.0F);
+                        x, y, -0.205F, 0.13F, 0.0F);
             }
         }
         poseStack.popPose();
     }
 
-
-    /**
-     * Backpack attachment copied in principle from SophisticatedBackpacks:
-     * follow the humanoid torso pivot, correct the item model's forward axis,
-     * then use the same torso-relative offsets. Do not add another arbitrary
-     * item scale here; the backpack's own worn/fixed model transform owns size.
-     */
     private static void drawBackpack(ItemStackRenderState item, PoseStack poseStack,
                                      SubmitNodeCollector collector, int light,
                                      AvatarRenderState state) {
@@ -98,6 +73,63 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         poseStack.mulPose(new Matrix4f().rotateY((float) Math.PI));
         poseStack.mulPose(new Matrix4f().rotateZ((float) Math.PI));
         poseStack.translate(0.0F, -0.25F, -0.30F);
+        poseStack.scale(0.50F, 0.75F, 0.50F);
+        item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
+        poseStack.popPose();
+    }
+
+    private static void drawBackpackContents(List<ItemStackRenderState> contents,
+                                             PoseStack poseStack, SubmitNodeCollector collector,
+                                             int light, AvatarRenderState state) {
+        poseStack.pushPose();
+        poseStack.mulPose(new Matrix4f().rotateY((float) Math.PI));
+        poseStack.mulPose(new Matrix4f().rotateZ((float) Math.PI));
+        poseStack.translate(0.0F, -0.25F, -0.30F);
+        // Same transform as the backpack: contents cannot drift independently.
+        for (int i = 0; i < 6; i++) {
+            float x = -0.105F + (i % 3) * 0.105F;
+            float y = -0.11F + (i / 3) * 0.15F;
+            drawHanging(contents.get(2 + i), poseStack, collector, light, state,
+                    x, y, -0.265F, 0.12F, 0.0F);
+        }
+        poseStack.popPose();
+    }
+
+    private static void drawSatchel(ItemStackRenderState item, PoseStack poseStack,
+                                    SubmitNodeCollector collector, int light,
+                                    AvatarRenderState state) {
+        if (item == null || item.isEmpty()) return;
+        poseStack.pushPose();
+        poseStack.translate(0.245F, 0.585F, -0.015F);
+        poseStack.mulPose(new Matrix4f().rotateY(0.48F));
+        poseStack.scale(0.50F, 0.50F, 0.50F);
+        item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
+        poseStack.popPose();
+    }
+
+    private static void drawSatchelContents(List<ItemStackRenderState> contents,
+                                             PoseStack poseStack, SubmitNodeCollector collector,
+                                             int light, AvatarRenderState state) {
+        poseStack.pushPose();
+        poseStack.translate(0.245F, 0.585F, -0.015F);
+        poseStack.mulPose(new Matrix4f().rotateY(0.48F));
+        for (int i = 0; i < 9; i++) {
+            float x = -0.075F + (i % 3) * 0.075F;
+            float y = -0.075F + (i / 3) * 0.075F;
+            draw(contents.get(8 + i), poseStack, collector, light, state,
+                    x, y, -0.145F, 0.105F);
+        }
+        poseStack.popPose();
+    }
+
+    private static void drawScaled(ItemStackRenderState item, PoseStack poseStack,
+                                   SubmitNodeCollector collector, int light,
+                                   AvatarRenderState state, float x, float y, float z,
+                                   float sx, float sy, float sz) {
+        if (item == null || item.isEmpty()) return;
+        poseStack.pushPose();
+        poseStack.translate(x, y, z);
+        poseStack.scale(sx, sy, sz);
         item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
     }
@@ -114,27 +146,12 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         poseStack.popPose();
     }
 
-    private static void drawRotated(ItemStackRenderState item, PoseStack poseStack,
-                                    SubmitNodeCollector collector, int light,
-                                    AvatarRenderState state, float x, float y, float z,
-                                    float scale, float xRot, float yRot, float zRot) {
-        if (item == null || item.isEmpty()) return;
-        poseStack.pushPose();
-        poseStack.translate(x, y, z);
-        poseStack.mulPose(new Matrix4f().rotateY(yRot).rotateX(xRot).rotateZ(zRot));
-        poseStack.scale(scale, scale, scale);
-        item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
-        poseStack.popPose();
-    }
-
     private static void drawHanging(ItemStackRenderState item, PoseStack poseStack,
                                     SubmitNodeCollector collector, int light,
                                     AvatarRenderState state, float x, float y, float z,
                                     float scale, float swing) {
         if (item == null || item.isEmpty()) return;
         poseStack.pushPose();
-        // Pivot at the attachment loop, so the lower end swings like a tool
-        // hanging from a belt instead of rotating around its centre.
         poseStack.translate(x, y, z);
         poseStack.mulPose(new Matrix4f().rotateZ((float) Math.PI + swing));
         poseStack.scale(scale, scale, scale);
