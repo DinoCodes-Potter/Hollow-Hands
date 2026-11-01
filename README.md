@@ -1,21 +1,18 @@
-# Hollow Hands
+# Hollow Hands 0.6.0
 
-Minecraft 26.3 Fabric client mod.
-
-## Build
-Requires Java 25 and Gradle 9.6:
-`gradle clean build`
+Minecraft 26.3 Fabric mod. Requires Java 25, Fabric Loader 0.20.1+, and Fabric API 0.165.0+26.3.
 
 ## Controls
 Press **G** in a world to open Carrying Gear. Change the key in Options → Controls → Key Binds.
 
-## Storage layout
+## Functional storage
 - Belt: 2 slots
 - Back: 6 slots
 - Satchel: 9 slots
 - Bandolier: 4 slots
 
-Select a compartment, select a slot, use **Store held stack** to store the main-hand stack, or **Take selected slot** to retrieve it into an empty selected hotbar slot.
+Select a compartment and slot:
+- **Store held stack** moves the entire main-hand stack into the selected empty compartment slot.
+- **Take selected slot** moves as much of that stack as will fit into the player's inventory. Any remainder stays stored.
 
-## Current implementation boundary
-This first functional storage pass persists item identifiers and counts in the local client config file `config/hollowhands-storage.properties`. It is a local client stash, not server-authoritative inventory: it is intended for single-player prototyping and does not yet synchronize to multiplayer servers. Item metadata/components are not preserved in this first pass.
+Storage is attached to the player, saved with player data, synchronized by the server, and preserves item components. The mod must be installed on both client and server (including the integrated single-player server).
