@@ -1,6 +1,7 @@
 {
   "textures": {
-    "0": "hollowhands:item/gear_belt",
+    "front": "hollowhands:item/gear_belt",
+    "side": "hollowhands:item/gear_belt_side",
     "particle": "hollowhands:item/gear_belt"
   },
   "gui_light": "front",
@@ -24,7 +25,7 @@
             16,
             16
           ],
-          "texture": "#0"
+          "texture": "#front"
         },
         "south": {
           "uv": [
@@ -33,7 +34,7 @@
             16,
             16
           ],
-          "texture": "#0"
+          "texture": "#side"
         },
         "east": {
           "uv": [
@@ -42,7 +43,7 @@
             16,
             16
           ],
-          "texture": "#0"
+          "texture": "#side"
         },
         "west": {
           "uv": [
@@ -51,7 +52,7 @@
             16,
             16
           ],
-          "texture": "#0"
+          "texture": "#side"
         },
         "up": {
           "uv": [
@@ -60,7 +61,7 @@
             16,
             16
           ],
-          "texture": "#0"
+          "texture": "#side"
         },
         "down": {
           "uv": [
@@ -69,80 +70,46 @@
             16,
             16
           ],
-          "texture": "#0"
-        }
-      }
-    },
-    {
-      "from": [
-        6,
-        4,
-        4
-      ],
-      "to": [
-        10,
-        12,
-        6
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#0"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#0"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#0"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#0"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#0"
-        },
-        "down": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#0"
+          "texture": "#side"
         }
       }
     }
   ],
   "display": {
+    "gui": {
+      "rotation": [
+        25,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2,
+        0
+      ],
+      "scale": [
+        0.32,
+        0.32,
+        0.32
+      ]
+    },
     "fixed": {
       "rotation": [
         0,
@@ -155,9 +122,77 @@
         0
       ],
       "scale": [
-        1,
-        1,
-        1
+        0.58,
+        0.58,
+        0.58
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        -90,
+        25
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ],
+      "scale": [
+        0.45,
+        0.45,
+        0.45
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        90,
+        -25
+      ],
+      "translation": [
+        1.13,
+        3.2,
+        1.13
+      ],
+      "scale": [
+        0.45,
+        0.45,
+        0.45
       ]
     }
   }

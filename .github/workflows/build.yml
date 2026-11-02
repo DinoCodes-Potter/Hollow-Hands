@@ -23,12 +23,14 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.8.0'
-      - name: Build against real Minecraft 26.3 and Fabric dependencies
+      - name: Validate item models and texture files
+        run: python3 scripts/validate_assets.py
+      - name: Build against Minecraft 26.3 and Fabric
         run: gradle --no-daemon clean build
       - name: Upload mod JAR
         uses: actions/upload-artifact@v4
         with:
-          name: hollowhands-mc26.3-fabric
-          path: build/libs/hollowhands-0.7.0.jar
+          name: hollowhands-mc26.3-fabric-v0.8.0
+          path: build/libs/hollowhands-0.8.0.jar
           if-no-files-found: error
           retention-days: 14
