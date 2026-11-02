@@ -113,6 +113,18 @@ public final class HollowHandsRenderLayer extends RenderLayer<AvatarRenderState,
         poseStack.popPose();
     }
 
+    private static void draw(ItemStackRenderState item, PoseStack poseStack,
+                             SubmitNodeCollector collector, int light,
+                             AvatarRenderState state, float x, float y, float z,
+                             float scale) {
+        if (item == null || item.isEmpty()) return;
+        poseStack.pushPose();
+        poseStack.translate(x, y, z);
+        poseStack.scale(scale, scale, scale);
+        item.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
+        poseStack.popPose();
+    }
+
     private static void drawScaled(ItemStackRenderState item, PoseStack poseStack,
                                    SubmitNodeCollector collector, int light,
                                    AvatarRenderState state, float x, float y, float z,
